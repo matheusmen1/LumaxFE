@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-lumax-blue: #1e3a8a;
+  --color-lumax-blue-dark: #172554;
+  --color-lumax-blue-light: #3b82f6;
+  --color-lumax-yellow: #eab308;
+  --color-lumax-orange: #f97316;
+}
+
+body {
+  @apply bg-gray-100 text-gray-800 antialiased;
+}
