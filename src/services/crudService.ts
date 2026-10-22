@@ -10,22 +10,13 @@ export interface CrudService<T> {
   excluir: (id: number) => Promise<void>;
 }
 
-const normalizar = (texto: string) =>
-  texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-
 /**
- * Cria um service CRUD padrão para os endpoints do openapi.yaml:
- *   GET    /apis/{recurso}        PUT /apis/{recurso}
- *   GET    /apis/{recurso}/{id}   POST /apis/{recurso}
- *   DELETE /apis/{recurso}/{id}
- *
- * @param recurso       caminho após /apis (ex.: "cliente")
- * @param camposBusca   campos usados na busca por nome/filtro
+ * Cria um service CRUD padrão para os endpoints do backend:
+ *   GET    /apis/{recurso}                 PUT /apis/{recurso}
+ *   GET    /apis/{recurso}/{id}            POST /apis/{recurso}
+ *   GET    /apis/{recurso}/filtro/{filtro} DELETE /apis/{recurso}/{id}
  */
-export function criarCrudService<T extends { id?: number }>(
-  recurso: string,
-  camposBusca: (keyof T)[],
-): CrudService<T> {
+export function criarCrudService<T extends { id?: number }>(recurso: string): CrudService<T> {
   const base = `/apis/${recurso}`;
 
   const listar = async (): Promise<T[]> => {
@@ -47,14 +38,16 @@ export function criarCrudService<T extends { id?: number }>(
       return response.data;
     },
 
-    // Ainda não existe endpoint de busca no backend: o filtro é feito no cliente.
     buscarPorNome: async (termo) => {
-      const lista = await listar();
-      const alvo = normalizar(termo.trim());
-      if (!alvo) return lista;
-      return lista.filter((item) =>
-        camposBusca.some((campo) => normalizar(String(item[campo] ?? '')).includes(alvo)),
-      );
+      const filtro = termo.trim();
+      if (!filtro) return listar();
+      try {
+        const response = await api.get<T[]>(`${base}/filtro/${encodeURIComponent(filtro)}`);
+        return Array.isArray(response.data) ? response.data : [];
+      } catch (erro) {
+        if (axios.isAxiosError(erro) && erro.response?.status === 400) return [];
+        throw erro;
+      }
     },
 
     criar: async (entidade) => {

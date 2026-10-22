@@ -1,22 +1,24 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import toast from 'react-hot-toast';
+import { acessoService, decodificarClaimsToken } from '../services/acessoService';
+import { STORAGE_TOKEN } from '../services/api';
 import { usuarioService } from '../services/usuarioService';
 import { NIVEL_ADMINISTRADOR, type Usuario, type UsuarioLogado } from '../features/usuario/types/usuario';
 import {
   AuthContext,
-  ERRO_CREDENCIAIS,
-  ERRO_SEM_USUARIOS,
   STORAGE_USUARIO,
   type AuthContextData,
 } from './authContextDef';
 
 const lerUsuarioSalvo = (): UsuarioLogado | null => {
   const salvo = localStorage.getItem(STORAGE_USUARIO);
-  if (!salvo) return null;
+  const token = localStorage.getItem(STORAGE_TOKEN);
+  if (!salvo || !token) return null;
   try {
     return JSON.parse(salvo) as UsuarioLogado;
   } catch {
     localStorage.removeItem(STORAGE_USUARIO);
+    localStorage.removeItem(STORAGE_TOKEN);
     return null;
   }
 };
@@ -37,28 +39,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUsuarioLogado(limpo);
   }, []);
 
-  /**
-   * PROVISÓRIO: o backend ainda não possui endpoint de login (/apis/usuario/logar).
-   * Enquanto isso, a validação é feita no cliente a partir de GET /apis/usuario.
-   * Substituir por uma chamada POST ao backend assim que o endpoint existir.
-   */
   const login = useCallback(
     async (email: string, senha: string) => {
-      const usuarios = await usuarioService.listar();
-      if (usuarios.length === 0) throw new Error(ERRO_SEM_USUARIOS);
+      const emailLimpo = email.trim();
+      const token = await acessoService.logar({ email: emailLimpo, senha });
+      localStorage.setItem(STORAGE_TOKEN, token);
 
-      const encontrado = usuarios.find(
-        (u) => u.email.trim().toLowerCase() === email.trim().toLowerCase() && u.senha === senha,
-      );
-      if (!encontrado) throw new Error(ERRO_CREDENCIAIS);
+      const claims = decodificarClaimsToken(token);
+      let usuarioCompleto: UsuarioLogado = {
+        id: claims.id,
+        nome: emailLimpo.split('@')[0] || emailLimpo,
+        email: emailLimpo,
+        nivel: claims.nivel ?? 0,
+      };
 
-      atualizarUsuarioLogado(encontrado);
+      if (claims.id != null) {
+        try {
+          const encontrado = await usuarioService.buscarPorId(claims.id);
+          usuarioCompleto = semSenha(encontrado);
+        } catch {
+          // Mantém os dados extraídos do token caso ocorra falha ao buscar por ID.
+        }
+      }
+
+      atualizarUsuarioLogado(usuarioCompleto);
     },
     [atualizarUsuarioLogado],
   );
 
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_USUARIO);
+    localStorage.removeItem(STORAGE_TOKEN);
     setUsuarioLogado(null);
     toast.success('Desconectado com sucesso!');
   }, []);
