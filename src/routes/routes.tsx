@@ -11,6 +11,10 @@ import { GerenciarTipoDespesa } from '../features/tipoDespesa/pages/GerenciarTip
 import { GerenciarTipoPagamento } from '../features/tipoPagamento/pages/GerenciarTipoPagamento';
 import { GerenciarUsuarios } from '../features/usuario/pages/GerenciarUsuarios';
 import { MeusDados } from '../features/usuario/components/MeusDados';
+import { GerenciarVenda } from '../features/venda/pages/GerenciarVenda';
+import { NovaVenda } from '../features/venda/pages/NovaVenda';
+import { GerenciarEntradaEstoque } from '../features/estoque/pages/GerenciarEntradaEstoque';
+import { NovaEntradaEstoque } from '../features/estoque/pages/NovaEntradaEstoque';
 
 export const AppRoutes = () => {
   const { usuarioLogado, isAdministrador } = useAuth();
@@ -29,6 +33,10 @@ export const AppRoutes = () => {
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/vendas" element={<GerenciarVenda />} />
+        <Route path="/vendas/nova" element={<NovaVenda />} />
+        <Route path="/estoque/entradas" element={<GerenciarEntradaEstoque />} />
+        <Route path="/estoque/entradas/nova" element={<NovaEntradaEstoque />} />
         <Route path="/clientes" element={<GerenciarCliente />} />
         <Route path="/fornecedores" element={<GerenciarFornecedor />} />
         <Route path="/produtos" element={<GerenciarProduto />} />

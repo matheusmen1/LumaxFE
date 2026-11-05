@@ -9,9 +9,10 @@ interface FormularioBaseProps {
   /** Executado no submit; erros lançados aqui são exibidos no topo do formulário. */
   onSubmit: () => Promise<void>;
   children: ReactNode;
+  rotuloSalvar?: string;
 }
 
-export const FormularioBase = ({ titulo, onCancelar, onSubmit, children }: FormularioBaseProps) => {
+export const FormularioBase = ({ titulo, onCancelar, onSubmit, children, rotuloSalvar = 'Salvar' }: FormularioBaseProps) => {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -45,7 +46,7 @@ export const FormularioBase = ({ titulo, onCancelar, onSubmit, children }: Formu
           <X size={16} /> Cancelar
         </button>
         <button type="submit" disabled={salvando} className={classeBotaoPrimario}>
-          <Save size={16} /> {salvando ? 'Salvando...' : 'Salvar'}
+          <Save size={16} /> {salvando ? 'Salvando...' : rotuloSalvar}
         </button>
       </div>
     </form>

@@ -10,6 +10,7 @@ interface CabecalhoCrudProps {
   onTermoBuscaChange: (valor: string) => void;
   onBuscar: () => void;
   onNovo: () => void;
+  rotuloNovo?: string;
 }
 
 export const CabecalhoCrud = ({
@@ -20,6 +21,7 @@ export const CabecalhoCrud = ({
   onTermoBuscaChange,
   onBuscar,
   onNovo,
+  rotuloNovo = 'Novo',
 }: CabecalhoCrudProps) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ export const CabecalhoCrud = ({
           {subtitulo && <p className="text-sm text-gray-500">{subtitulo}</p>}
         </div>
         <button type="button" onClick={onNovo} className={classeBotaoDestaque}>
-          <Plus size={18} /> Novo
+          <Plus size={18} /> {rotuloNovo}
         </button>
       </div>
 
