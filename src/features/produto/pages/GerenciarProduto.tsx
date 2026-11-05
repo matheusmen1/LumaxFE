@@ -40,6 +40,21 @@ const colunas: Coluna<Produto>[] = [
   { titulo: 'Fornecedor', render: (p) => p.fornecedor?.razaoSocial ?? '-' },
   { titulo: 'Valor', render: (p) => <span className="font-semibold">{formatarMoeda(p.valor)}</span> },
   { titulo: 'Casco', render: (p) => formatarMoeda(p.valorCasco) },
+  {
+    titulo: 'Estoque',
+    render: (p) => {
+      const saldo = p.estoque ?? 0;
+      return (
+        <span
+          className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+            saldo === 0 ? 'bg-red-100 text-red-700' : saldo <= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-700'
+          }`}
+        >
+          {saldo} un.
+        </span>
+      );
+    },
+  },
 ];
 
 export const GerenciarProduto = () => {

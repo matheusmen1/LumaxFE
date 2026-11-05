@@ -3,12 +3,15 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   BatteryCharging,
   ChevronDown,
+  ClipboardList,
   CreditCard,
   LayoutDashboard,
   LogOut,
   Menu,
   Package,
+  PackagePlus,
   Receipt,
+  ShoppingCart,
   Tags,
   Truck,
   UserCircle,
@@ -33,6 +36,14 @@ interface SecaoMenu {
 const SECOES: SecaoMenu[] = [
   { titulo: 'Geral', itens: [{ rotulo: 'Início', rota: '/dashboard', icone: LayoutDashboard }] },
   {
+    titulo: 'Operações',
+    itens: [
+      { rotulo: 'Nova Venda', rota: '/vendas/nova', icone: ShoppingCart },
+      { rotulo: 'Vendas', rota: '/vendas', icone: ClipboardList },
+      { rotulo: 'Entradas de Estoque', rota: '/estoque/entradas', icone: PackagePlus },
+    ],
+  },
+  {
     titulo: 'Cadastros',
     itens: [
       { rotulo: 'Clientes', rota: '/clientes', icone: Users },
@@ -56,6 +67,10 @@ const SECOES: SecaoMenu[] = [
 
 const TITULOS: Record<string, string> = {
   '/dashboard': 'Início',
+  '/vendas': 'Vendas',
+  '/vendas/nova': 'Nova Venda',
+  '/estoque/entradas': 'Entradas de Estoque',
+  '/estoque/entradas/nova': 'Nova Entrada de Estoque',
   '/clientes': 'Clientes',
   '/fornecedores': 'Fornecedores',
   '/produtos': 'Produtos',
@@ -124,6 +139,7 @@ export const Layout = () => {
                   <li key={item.rota}>
                     <NavLink
                       to={item.rota}
+                      end
                       title={item.rotulo}
                       className={({ isActive }) =>
                         `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${

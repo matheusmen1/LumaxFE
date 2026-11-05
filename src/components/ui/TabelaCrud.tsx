@@ -13,8 +13,10 @@ interface TabelaCrudProps<T> {
   carregando: boolean;
   erro?: string | null;
   mensagemVazio?: string;
-  onAlterar: (item: T) => void;
-  onExcluir: (item: T) => void;
+  /** Quando omitido, o botão Alterar não é exibido. */
+  onAlterar?: (item: T) => void;
+  /** Quando omitido, o botão Excluir não é exibido. */
+  onExcluir?: (item: T) => void;
 }
 
 export function TabelaCrud<T extends { id?: number }>({
@@ -62,7 +64,7 @@ export function TabelaCrud<T extends { id?: number }>({
                   {c.titulo}
                 </th>
               ))}
-              <th className="px-4 py-3 text-right font-semibold">Ações</th>
+              {(onAlterar || onExcluir) && <th className="px-4 py-3 text-right font-semibold">Ações</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -73,31 +75,37 @@ export function TabelaCrud<T extends { id?: number }>({
                     {c.render(item)}
                   </td>
                 ))}
+                {(onAlterar || onExcluir) && (
                 <td className="whitespace-nowrap px-4 py-3 text-right">
                   <div className="inline-flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onAlterar(item)}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-lumax-blue-light transition hover:bg-blue-100"
-                    >
-                      <Pencil size={15} /> Alterar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setItemParaExcluir(item)}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-red-600 transition hover:bg-red-50"
-                    >
-                      <Trash2 size={15} /> Excluir
-                    </button>
+                    {onAlterar && (
+                      <button
+                        type="button"
+                        onClick={() => onAlterar(item)}
+                        className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-lumax-blue-light transition hover:bg-blue-100"
+                      >
+                        <Pencil size={15} /> Alterar
+                      </button>
+                    )}
+                    {onExcluir && (
+                      <button
+                        type="button"
+                        onClick={() => setItemParaExcluir(item)}
+                        className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-red-600 transition hover:bg-red-50"
+                      >
+                        <Trash2 size={15} /> Excluir
+                      </button>
+                    )}
                   </div>
                 </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {itemParaExcluir && (
+      {itemParaExcluir && onExcluir && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md animate-in zoom-in-95 rounded-2xl bg-white p-6 shadow-2xl">
             <div className="mb-4 flex items-center gap-3 text-red-600">

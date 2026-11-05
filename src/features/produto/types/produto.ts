@@ -9,6 +9,8 @@ export interface Produto {
   /** Bytes da imagem, trafegados em Base64 pelo Jackson. */
   foto?: string | null;
   valorCasco?: number | null;
+  /** Saldo em estoque: somente leitura, alterado apenas por vendas e entradas de estoque. */
+  estoque?: number | null;
   categoria: Pick<Categoria, 'id'> & Partial<Categoria>;
   fornecedor: Pick<Fornecedor, 'id'> & Partial<Fornecedor>;
 }

@@ -33,3 +33,12 @@ export const ESTADOS_BR = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
   'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
 ];
+
+/** Aceita ISO string ("2026-11-05T08:30:00") ou array do Jackson ([2026, 11, 5, 8, 30, 0]). */
+export const formatarDataHora = (valor?: string | number[] | null): string => {
+  if (!valor) return '-';
+  const data = Array.isArray(valor)
+    ? new Date(valor[0], (valor[1] ?? 1) - 1, valor[2] ?? 1, valor[3] ?? 0, valor[4] ?? 0, valor[5] ?? 0)
+    : new Date(valor);
+  return Number.isNaN(data.getTime()) ? '-' : data.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+};
