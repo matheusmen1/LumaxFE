@@ -7,6 +7,7 @@ import { GerenciarCliente } from '../features/cliente/pages/GerenciarCliente';
 import { GerenciarFornecedor } from '../features/fornecedor/pages/GerenciarFornecedor';
 import { GerenciarProduto } from '../features/produto/pages/GerenciarProduto';
 import { GerenciarCategoria } from '../features/categoria/pages/GerenciarCategoria';
+import { GerenciarLancamento } from '../features/lancamento/pages/GerenciarLancamento';
 import { GerenciarTipoDespesa } from '../features/tipoDespesa/pages/GerenciarTipoDespesa';
 import { GerenciarTipoPagamento } from '../features/tipoPagamento/pages/GerenciarTipoPagamento';
 import { GerenciarUsuarios } from '../features/usuario/pages/GerenciarUsuarios';
@@ -41,6 +42,7 @@ export const AppRoutes = () => {
         <Route path="/fornecedores" element={<GerenciarFornecedor />} />
         <Route path="/produtos" element={<GerenciarProduto />} />
         <Route path="/categorias" element={<GerenciarCategoria />} />
+        <Route path="/lancamentos" element={<GerenciarLancamento />} />
         <Route path="/tipos-despesa" element={<GerenciarTipoDespesa />} />
         <Route path="/tipos-pagamento" element={<GerenciarTipoPagamento />} />
         {isAdministrador && <Route path="/usuarios" element={<GerenciarUsuarios />} />}

@@ -11,6 +11,7 @@ import {
   Package,
   PackagePlus,
   Receipt,
+  ReceiptText,
   ShoppingCart,
   Tags,
   Truck,
@@ -55,6 +56,7 @@ const SECOES: SecaoMenu[] = [
   {
     titulo: 'Financeiro',
     itens: [
+      { rotulo: 'Lançamentos', rota: '/lancamentos', icone: ReceiptText },
       { rotulo: 'Tipos de Despesa', rota: '/tipos-despesa', icone: Receipt },
       { rotulo: 'Tipos de Pagamento', rota: '/tipos-pagamento', icone: CreditCard },
     ],
@@ -75,6 +77,7 @@ const TITULOS: Record<string, string> = {
   '/fornecedores': 'Fornecedores',
   '/produtos': 'Produtos',
   '/categorias': 'Categorias',
+  '/lancamentos': 'Lançamentos de Despesa',
   '/tipos-despesa': 'Tipos de Despesa',
   '/tipos-pagamento': 'Tipos de Pagamento',
   '/usuarios': 'Usuários',
