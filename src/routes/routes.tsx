@@ -16,6 +16,7 @@ import { GerenciarVenda } from '../features/venda/pages/GerenciarVenda';
 import { NovaVenda } from '../features/venda/pages/NovaVenda';
 import { GerenciarEntradaEstoque } from '../features/estoque/pages/GerenciarEntradaEstoque';
 import { NovaEntradaEstoque } from '../features/estoque/pages/NovaEntradaEstoque';
+import { Relatorios } from '../features/relatorio/pages/Relatorios';
 
 export const AppRoutes = () => {
   const { usuarioLogado, isAdministrador } = useAuth();
@@ -45,6 +46,7 @@ export const AppRoutes = () => {
         <Route path="/lancamentos" element={<GerenciarLancamento />} />
         <Route path="/tipos-despesa" element={<GerenciarTipoDespesa />} />
         <Route path="/tipos-pagamento" element={<GerenciarTipoPagamento />} />
+        {isAdministrador && <Route path="/relatorios" element={<Relatorios />} />}
         {isAdministrador && <Route path="/usuarios" element={<GerenciarUsuarios />} />}
         <Route path="/meus-dados" element={<MeusDados />} />
       </Route>
