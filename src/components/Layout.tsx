@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type ElementType } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
+  BarChart3,
   BatteryCharging,
   ChevronDown,
   ClipboardList,
   CreditCard,
-  LayoutDashboard,
   LogOut,
   Menu,
   Package,
@@ -35,7 +35,6 @@ interface SecaoMenu {
 }
 
 const SECOES: SecaoMenu[] = [
-  { titulo: 'Geral', itens: [{ rotulo: 'Início', rota: '/dashboard', icone: LayoutDashboard }] },
   {
     titulo: 'Operações',
     itens: [
@@ -62,6 +61,10 @@ const SECOES: SecaoMenu[] = [
     ],
   },
   {
+    titulo: 'Relatórios',
+    itens: [{ rotulo: 'Relatórios', rota: '/relatorios', icone: BarChart3, somenteAdmin: true }],
+  },
+  {
     titulo: 'Administração',
     itens: [{ rotulo: 'Usuários', rota: '/usuarios', icone: UserCog, somenteAdmin: true }],
   },
@@ -80,6 +83,7 @@ const TITULOS: Record<string, string> = {
   '/lancamentos': 'Lançamentos de Despesa',
   '/tipos-despesa': 'Tipos de Despesa',
   '/tipos-pagamento': 'Tipos de Pagamento',
+  '/relatorios': 'Relatórios',
   '/usuarios': 'Usuários',
   '/meus-dados': 'Meus Dados',
 };
